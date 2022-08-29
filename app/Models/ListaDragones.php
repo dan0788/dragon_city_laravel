@@ -9,7 +9,7 @@ class ListaDragones extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'lista_dragones';
+    protected $table = 'dragon_list';
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +17,10 @@ class ListaDragones extends Model
      * @var string[]
      */
     protected $fillable = [
-        'nombre', 'atributo_1', 'atributo_2', 'atributo_3', 'atributo_4'
+        'dragon', 'first_element', 'second_element', 'third_element', 'fourth_element','created_by','updated_by','deleted_by'
+    ];
+
+    protected $hidden = [
+        //aquí se escriben los campos que laravel no va a mostrar en el frontend
     ];
 }

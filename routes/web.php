@@ -14,3 +14,8 @@
 */
 
 $router->get('/listaDragones', 'ListaDragonesController@index');
+$router->get('/listaDragones/{id}', 'ListaDragonesController@show');
+$router->post('/listaDragones', 'ListaDragonesController@store');
+$router->put('/listaDragones/{id}', 'ListaDragonesController@update');
+$router->delete('/listaDragones/{id}', 'ListaDragonesController@destroy');
+$router->delete('/listaDragones/all', 'ListaDragonesController@destroyAll');
