@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ListaDragones;
+use App\Models\Atributte_1;
+use App\Models\Atributte_2;
+use App\Models\Atributte_3;
+use App\Models\Atributte_4;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +25,11 @@ class ListaDragonesController extends Controller
 
     public function index()
     {
-        $atributte_1 = ListaDragones::all();
-        if($atributte_1->isEmpty()){
+        $dragones = ListaDragones::all();
+        if($dragones->isEmpty()){
             return $this->successResponse(['error' => 'Empty']);
         };
-        return $this->successResponse($atributte_1);
+        return $this->successResponse($dragones);
     }
 
     public function show($id)
@@ -42,15 +46,41 @@ class ListaDragonesController extends Controller
         $rules = [
             'dragon' => 'required|max:100',
             'first_element' => 'required|integer',
-            'second_element' => 'integer',
-            'third_element' => 'integer',
-            'fourth_element' => 'integer',
+            'second_element' => 'required|integer',
+            'third_element' => 'required|integer',
+            'fourth_element' => 'required|integer',
             'created_by' => 'required|integer'
         ];
         $this->validate($request,$rules);
-        //$atributte_1 = DB::table('dragon_list')->insert($request->all());//no crea auto ceated_by y updated_by
-        $atributte_1 = ListaDragones::create($request->all());//sí crea auto ceated_by y updated_by
-        return $this->successResponse($atributte_1);
+        $atributte_1 = Atributte_1::create(['element_id' => $request['first_element']]);
+        $atributte_2 = Atributte_2::create(['element_id' => $request['second_element']]);
+        $atributte_3 = Atributte_3::create(['element_id' => $request['third_element']]);
+        $atributte_4 = Atributte_4::create(['element_id' => $request['fourth_element']]);
+        $count_atributte_1 = DB::select("select currval('atributte_1_id_seq')");
+        $count_atributte_2 = DB::select("select currval('atributte_2_id_seq')");
+        $count_atributte_3 = DB::select("select currval('atributte_3_id_seq')");
+        $count_atributte_4 = DB::select("select currval('atributte_4_id_seq')");
+        if( $count_atributte_1 == $count_atributte_2 && $count_atributte_1 == $count_atributte_3 &&
+            $count_atributte_1 == $count_atributte_4 && $count_atributte_2 == $count_atributte_3 &&
+            $count_atributte_2 == $count_atributte_4 && $count_atributte_3 == $count_atributte_4 ){
+            $atributte_1 = Atributte_1::findOrFail($count_atributte_1);
+            $atributte_2 = Atributte_2::findOrFail($count_atributte_2);
+            $atributte_3 = Atributte_3::findOrFail($count_atributte_3);
+            $atributte_4 = Atributte_4::findOrFail($count_atributte_4);
+            /*$atributte_list = [
+                'dragon' => $request['dragon'],
+                'first_element' => 'required|integer',
+                'second_element' => 'integer',
+                'third_element' => 'integer',
+                'fourth_element' => 'integer',
+                'created_by' => 'required|integer'
+            ];*/
+        } else {
+            return $this->successResponse(['error' => 'empty']);
+        }
+        //$dragones = ListaDragones::create($request->all());//sí crea auto ceated_by y updated_by
+        //return $this->successResponse($dragones);
+        return $atributte_1;
     }
 
     public function update(Request $request, $id)
