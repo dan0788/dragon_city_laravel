@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ListaDragones;
+use App\Models\Elements;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class ListaDragonesController extends Controller
+class ElementsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,59 +21,48 @@ class ListaDragonesController extends Controller
 
     public function index()
     {
-        $atributte_1 = ListaDragones::all();
-        if($atributte_1->isEmpty()){
+        $elements = Elements::all('id','name');
+        if($elements->isEmpty()){
             return $this->successResponse(['error' => 'Empty']);
         };
-        return $this->successResponse($atributte_1);
+        return $this->successResponse($elements);
     }
 
     public function show($id)
     {
-        $atributte_1 = DB::table('dragon_list')->get()->where("id",$id);
-        if($atributte_1->isEmpty()){
+        $elements = DB::table('elements')->get()->where("id",$id);
+        if($elements->isEmpty()){
             return $this->successResponse(['error' => 'Empty']);
         };
-        return $this->successResponse($atributte_1);
+        return $this->successResponse($elements);
     }
 
     public function store(Request $request)
     {
         $rules = [
-            'dragon' => 'required|max:100',
-            'first_element' => 'required|integer',
-            'second_element' => 'integer',
-            'third_element' => 'integer',
-            'fourth_element' => 'integer',
+            'name' => 'required|max:100',
             'created_by' => 'required|integer'
         ];
         $this->validate($request,$rules);
-        //$atributte_1 = DB::table('dragon_list')->insert($request->all());//no crea auto ceated_by y updated_by
-        $atributte_1 = ListaDragones::create($request->all());//sí crea auto ceated_by y updated_by
-        return $this->successResponse($atributte_1);
+        //$elements = DB::table('dragon_list')->insert($request->all());//no crea auto ceated_by y updated_by
+        $elements = Elements::create($request->all());//sí crea auto ceated_by y updated_by
+        return $this->successResponse($elements);
     }
 
     public function update(Request $request, $id)
     {
         $rules = [
-            'element_id' => 'required|integer'
-        ];
-        /*$rules = [
-            'dragon' => 'required|max:100',
-            'first_element' => 'required|integer',
-            'second_element' => 'integer',
-            'third_element' => 'integer',
-            'fourth_element' => 'integer',
+            'name' => 'required|max:100',
             'updated_by' => 'required|integer'
-        ];*/
+        ];
         $this->validate($request,$rules);
-        $atributte_1 = ListaDragones::findOrFail($id);
-        $atributte_1->fill($request->all());
-        if ($atributte_1->isClean()) {
+        $elements = Elements::findOrFail($id);
+        $elements->fill($request->all());
+        if ($elements->isClean()) {
             return $this->errorResponse('Al least one value must be changed', Response::HTTP_UNPROCESSABLE_ENTITY);
         };
-        $atributte_1->save();
-        return $this->successResponse($atributte_1);
+        $elements->save();
+        return $this->successResponse($elements);
     }
 
     public function destroy(Request $request, $id)
@@ -82,11 +71,11 @@ class ListaDragonesController extends Controller
             'deleted_by' => 'required|integer'
         ];
         $this->validate($request,$rules);
-        $atributte_1 = ListaDragones::findOrFail($id);
-        $atributte_1->deleted_by = $request->deleted_by;
-        $atributte_1->save();
-        $atributte_1->delete();
-        return $this->successResponse($atributte_1);
+        $elements = Elements::findOrFail($id);
+        $elements->deleted_by = $request->deleted_by;
+        $elements->save();
+        $elements->delete();
+        return $this->successResponse($elements);
     }
 
     public function destroyAll(Request $request)
@@ -95,12 +84,12 @@ class ListaDragonesController extends Controller
             'deleted_by' => 'required|integer'
         ];
         $this->validate($request,$rules);
-        $count = ListaDragones::all()->count()+1;
+        $count = Elements::all()->count()+1;
         for ($i=1; $i <= $count; $i++) {
-            $atributte_1 = ListaDragones::all()->first();
-            $atributte_1->deleted_by = $request->deleted_by;
-            $atributte_1->save();
-            $atributte_1->delete();
+            $elements = Elements::all()->first();
+            $elements->deleted_by = $request->deleted_by;
+            $elements->save();
+            $elements->delete();
         }
         return $this->successResponse(200);
     }
