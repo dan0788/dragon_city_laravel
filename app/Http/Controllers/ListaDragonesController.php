@@ -65,7 +65,7 @@ class ListaDragonesController extends Controller
             $count_atributte_2 == $count_atributte_4 && $count_atributte_3 == $count_atributte_4 ){
             $atributte_1 = Atributte_1::findOrFail($count_atributte_1);
             $atributte_2 = Atributte_2::findOrFail($count_atributte_2);
-            $atributte_3 = Atributte_3::findOrFail($count_atributte_3);
+            $atributte_3 =Atributte_3::findOrFail($count_atributte_3);
             $atributte_4 = Atributte_4::findOrFail($count_atributte_4);
             /*$atributte_list = [
                 'dragon' => $request['dragon'],
